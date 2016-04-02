@@ -6,6 +6,17 @@ var URL = 'www.toggl.com/api/v8/time_entries';
 var AUTH_URL = 'https://' + API_TOKEN + ':api_token@' + URL;
 console.log(chalk.blue(AUTH_URL));
 
+
+var weekday = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+];
+
 request.get(AUTH_URL, function(err, response, body) {
     if(err) console.log(chalk.red(err));
 
@@ -15,7 +26,10 @@ request.get(AUTH_URL, function(err, response, body) {
     json.forEach(function(entry) {
         console.log(
             chalk.magenta(entry.id),
-            chalk.green(Date.parse(entry.start)),
+            
+            chalk.green(weekday[new Date(entry.start).getDay()]),
+            chalk.green(new Date(entry.start).getMonth()),
+            chalk.green(new Date(entry.start).getYear()),
             chalk.red(Date.parse(entry.stop)),
             chalk.blue(entry.description)
 

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>-->
+        <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
+    </head>
+    <body>
+        <div id="viz"></div>
+
+        <div id="wiz">
+            <svg width="720" height="120">
+            </svg>
+        </div>
+        
+        <script type="text/javascript">
+
+         /**
+          * weird https://github.com/mbostock/d3/issues/230
+          */
+         var svg = d3.select("svg");
+         var circle = svg.selectAll("circle")
+                         .data([{r: 32}, {r: 57}, {r: 112}, {r: 99}]);
+
+         var circleEnter = circle.enter().append("circle");
+         
+         circle.style("fill", "steelblue");
+         circleEnter.attr("r", 30);
+
+         /**
+          * uses anonymous function to set the value of a parameter 
+          */
+         circleEnter.attr("cy", 60);
+         circleEnter.attr("cx", function() { return Math.random() * 720; });
+
+         /**
+          * binds data to the circles
+          */
+
+         circleEnter.attr("r", function(d) { return Math.sqrt(d.r); });
+
+         console.log(circle);
+
+
+
+         circle.on("mouseover", function(){d3.select(this).style("fill", "aliceblue");});
+         circle.on("mouseout", function(){d3.select(this).style("fill", "steelblue");})
+         
+         
+             var dataset = [];
+         for(var i=0; i<5; i++) {
+             dataset.push(Math.round(Math.random()*100));
+         }
+         console.log(dataset);
+
+
+         /**
+          * adds an svg element to the viz element
+         */
+         var sampleSVG = d3.select("#viz")
+                           .append("svg")
+                           .attr("width", 400)
+                           .attr("height", 100);
+
+         sampleSVG.selectAll("circle")
+                  .data(dataset)
+                  .enter().append("circle")
+                  .style("stroke", "gray")
+                  .style("fill", "white")
+                  .attr("r", 40)
+                  .attr("r", function(d, i) {return d / 2})
+                  .attr("cx", function(d, i) {return i * 80})
+                  .attr("cy", 50)
+                  .on("mouseover", function(){d3.select(this).style("fill", "aliceblue");})
+                  .on("mouseout", function(){d3.select(this).style("fill", "white");})
+//                  .on("mousedown",  animateFirstStep ); 
+
+//         function genAnimateFirstStep(d) {
+             function animateFirstStep() {
+                 d3.select(this)
+                   .transition()
+                   .delay(100)
+                   .duration(1000)
+                   .style("fill", "black")
+                   .attr("r", 10)
+                   .each("end", animateSecondStep);
+             };
+  //       }
+         // http://christopheviau.com/d3_tutorial/
+    //     function genAnimateSecondStep(d) {
+         function animateSecondStep() {
+                 d3.select(this)
+                   .transition()
+                   .duration(1000)
+                   .style("fill", "white")
+                   .attr("r", 40);
+                 
+             };
+      //   }
+
+         
+        </script>
+    </body>
+</html>
